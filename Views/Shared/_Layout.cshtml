@@ -1,5 +1,4 @@
-﻿<!-- _Layout.cshtml -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -8,57 +7,117 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     @RenderSection("Styles", required: false)
+    <style>
+        /* Custom styles for navigation */
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .navbar {
+            padding: 1rem 0;
+        }
+        .navbar-toggler {
+            border: none;
+            color: #ffffff;
+        }
+        .navbar-toggler:focus, .navbar-toggler:active {
+            outline: none;
+            box-shadow: none;
+        }
+        .navbar-nav .nav-item {
+            position: relative;
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: #f0f0f0;
+        }
+        .dropdown-menu {
+            border: none;
+            background-color: #343a40;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .dropdown-item {
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: #1e2124;
+            color: #ffffff;
+        }
+        .dropdown-submenu .dropdown-menu {
+            left: 100%;
+            top: 0;
+        }
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+        .floating-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+       
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Navigation System</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
-                @* Dynamic navigation items *@
-                @{
-                    var navigationItems = ViewData["NavigationItems"] as List<NavigationItem>;
-                    var rootItems = navigationItems.Where(n => n.ParentId == null).ToList(); // Get root items (e.g., Products)
-
-                    foreach (var root in rootItems)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink@root.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @root.Name
-                            </a>
-                            @if (root.Children != null && root.Children.Any())
-                            {
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@root.Id">
-                                    @foreach (var child in root.Children)
-                                    {
-                                        <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownMenuLink@child.Id">@child.Name</a>
-                                        @if (child.Children != null && child.Children.Any())
-                                        {
-                                            <div class="dropdown-menu">
-                                                @foreach (var subChild in child.Children)
-                                                {
-                                                    <a class="dropdown-item" href="#">@subChild.Name</a>
-                                                }
-                                            </div>
-                                        }
-                                    }
-                                </div>
-                            }
-                        </li>
-                    }
-                }
-            </ul>
-        </div>
-    </nav>
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="floating-card">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <a class="navbar-brand" href="#">Navigation System</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav mx-auto"> <!-- Center-align the navigation -->
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                @* Dynamic navigation items *@
+                                @{
+                                    var navigationItems = ViewData["NavigationItems"] as List<NavigationItem>;
+                                    var rootItems = navigationItems.Where(n => n.ParentId == null).ToList(); // Get root items (e.g., Products)
+
+                                    foreach (var root in rootItems)
+                                    {
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink@root.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                @root.Name
+                                            </a>
+                                            @if (root.Children != null && root.Children.Any())
+                                            {
+                                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@root.Id">
+                                                    @foreach (var child in root.Children)
+                                                    {
+                                                        <partial name="_SubMenu" model="@child" />
+                                                    }
+                                                </div>
+                                            }
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </nav>
+                    <main role="main">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

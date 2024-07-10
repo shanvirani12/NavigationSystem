@@ -1,0 +1,15 @@
+﻿<!-- _SubMenu.cshtml -->
+@model NavigationItem
+
+<div class="dropdown">
+    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownMenuLink@Model.Id">@Model.Name</a>
+    @if (Model.Children != null && Model.Children.Any())
+    {
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@Model.Id">
+            @foreach (var child in Model.Children)
+            {
+                        <partial name="_SubMenu" model="@child" />
+            }
+            </div>
+    }
+</div>
