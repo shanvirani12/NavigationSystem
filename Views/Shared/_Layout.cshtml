@@ -23,32 +23,34 @@
                 @* Dynamic navigation items *@
                 @{
                     var navigationItems = ViewData["NavigationItems"] as List<NavigationItem>;
-                }
-                @foreach (var item in navigationItems)
-                {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink@item.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @item.Name
-                        </a>
-                        @if (item.Children != null && item.Children.Any())
-                        {
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@item.Id">
-                                @foreach (var child in item.Children)
-                                {
-                                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownMenuLink@child.Id">@child.Name</a>
-                                    @if (child.Children != null && child.Children.Any())
+                    var rootItems = navigationItems.Where(n => n.ParentId == null).ToList(); // Get root items (e.g., Products)
+
+                    foreach (var root in rootItems)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink@root.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @root.Name
+                            </a>
+                            @if (root.Children != null && root.Children.Any())
+                            {
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@root.Id">
+                                    @foreach (var child in root.Children)
                                     {
-                                        <div class="dropdown-menu">
-                                            @foreach (var subChild in child.Children)
-                                            {
-                                                <a class="dropdown-item" href="#">@subChild.Name</a>
-                                            }
-                                        </div>
+                                        <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownMenuLink@child.Id">@child.Name</a>
+                                        @if (child.Children != null && child.Children.Any())
+                                        {
+                                            <div class="dropdown-menu">
+                                                @foreach (var subChild in child.Children)
+                                                {
+                                                    <a class="dropdown-item" href="#">@subChild.Name</a>
+                                                }
+                                            </div>
+                                        }
                                     }
-                                }
-                            </div>
-                        }
-                    </li>
+                                </div>
+                            }
+                        </li>
+                    }
                 }
             </ul>
         </div>
