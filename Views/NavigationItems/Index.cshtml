@@ -1,0 +1,33 @@
+﻿<!-- Views/NavigationItems/Index.cshtml -->
+@model List<NavigationItem>
+
+<h2>Navigation Items</h2>
+
+<table id="navigationItemsTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navigationItemsTable').DataTable();
+        });
+    </script>
+}

@@ -1,0 +1,12 @@
+﻿@model List<NavigationItem>
+
+@foreach (var item in Model)
+{
+    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownMenuLink@item.Id">@item.Name</a>
+    @if (item.Children != null && item.Children.Any())
+    {
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@item.Id">
+            @await Html.PartialAsync("_NestedDropdown", item.Children)
+        </div>
+    }
+}

@@ -1,0 +1,85 @@
+﻿<!-- _Layout.cshtml -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Navigation System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Navigation System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                @* Dynamic navigation items *@
+                @{
+                    var navigationItems = ViewData["NavigationItems"] as List<NavigationItem>;
+                }
+                @foreach (var item in navigationItems)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink@item.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @item.Name
+                        </a>
+                        @if (item.Children != null && item.Children.Any())
+                        {
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink@item.Id">
+                                @foreach (var child in item.Children)
+                                {
+                                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownMenuLink@child.Id">@child.Name</a>
+                                    @if (child.Children != null && child.Children.Any())
+                                    {
+                                        <div class="dropdown-menu">
+                                            @foreach (var subChild in child.Children)
+                                            {
+                                                <a class="dropdown-item" href="#">@subChild.Name</a>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Check dropdown initialization
+            $('.dropdown-toggle').dropdown();
+
+            // Check for dropdown menu click events
+            $('.dropdown-toggle').on('click', function (e) {
+                var $subMenu = $(this).next('.dropdown-menu');
+                $subMenu.toggleClass('show');
+
+                $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                    $('.dropdown-submenu .show').removeClass('show');
+                });
+
+                return false;
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
