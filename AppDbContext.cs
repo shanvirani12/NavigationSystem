@@ -13,7 +13,7 @@ namespace NavigationSystem
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure relationships, constraints, etc.
+            
             modelBuilder.Entity<NavigationItem>()
                 .HasOne(n => n.Parent)
                 .WithMany(n => n.Children)

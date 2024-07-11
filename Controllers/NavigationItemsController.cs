@@ -15,14 +15,14 @@ namespace NavigationSystem.Controllers
             _repository = repository;
         }
 
-        // GET: NavigationItems
+        
         public async Task<IActionResult> Index()
         {
             var navigationItems = await _repository.GetAllAsync();
             return View(navigationItems);
         }
 
-        // GET: NavigationItems/Details/5
+      
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,14 +39,14 @@ namespace NavigationSystem.Controllers
             return View(navigationItem);
         }
 
-        // GET: NavigationItems/Create
+       
         public IActionResult Create()
         {
 
             return View();
         }
 
-        // POST: NavigationItems/Create
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ParentId")] NavigationItem navigationItem)
@@ -74,7 +74,7 @@ namespace NavigationSystem.Controllers
             return View(navigationItem);
         }
 
-        // POST: NavigationItems/Edit/5
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ParentId")] NavigationItem navigationItem)
@@ -108,7 +108,7 @@ namespace NavigationSystem.Controllers
             return View(navigationItem);
         }
 
-        // POST: NavigationItems/Delete/5
+ 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

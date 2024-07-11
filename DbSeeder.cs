@@ -10,13 +10,13 @@ namespace NavigationSystem
             using (var context = new AppDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()))
             {
-                // Check if there are any existing navigation items
+      
                 if (context.NavigationItems.Any())
                 {
-                    return; // Database already seeded
+                    return; 
                 }
 
-                // Seed initial data
+        
                 var navigationItems = new List<NavigationItem>
                 {
                     new NavigationItem { Name = "Products", Children = new List<NavigationItem>
@@ -42,7 +42,7 @@ namespace NavigationSystem
                     }
                 };
 
-                // Add to context and save changes
+               
                 context.NavigationItems.AddRange(navigationItems);
                 context.SaveChanges();
             }
